@@ -1,3 +1,5 @@
+import NavBtn from './NavBtn';
+
 export default function Nav() {
     return (
         <nav>

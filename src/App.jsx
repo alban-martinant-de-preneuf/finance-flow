@@ -1,7 +1,9 @@
-import { useState } from 'react'
+import Head from './components/Head';
+import Wrapper from './components/Wrapper';
+import View from './components/View';
+import Nav from './components/Nav';
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <>

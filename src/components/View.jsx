@@ -1,3 +1,6 @@
+import ProgressBar from './ProgressBar';
+import TransactionBtn from './TransactionBtn';
+
 export default function View() {
     return (
         <main>
