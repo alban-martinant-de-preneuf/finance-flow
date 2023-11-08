@@ -15,6 +15,8 @@ function getUser(string $email, PDO $db): ?array
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
+
+//signin 
 if (isset($_GET['signin'])) {
     if (!isset($_POST['email']) || !isset($_POST['password']) || !isset($_POST['passwordConfirm'])) {
         echo json_encode(['message' => 'Please fill in all fields.', 'success' => false]);
@@ -52,6 +54,8 @@ if (isset($_GET['signin'])) {
 
     echo json_encode(['message' => 'User created.', 'success' => true]);
 }
+
+//login 
 
 if (isset($_GET['login'])) {
     if (!isset($_POST['email']) || !isset($_POST['password'])) {
@@ -102,6 +106,8 @@ if (isset($_GET['login'])) {
     ]);
 }
 
+
+//logout 
 if (isset($_GET['logout'])) {
     if (isset($_COOKIE['jwtToken'])) {
         setcookie('jwtToken', $_COOKIE['jwtToken'], time(), '/', '', false, true);
