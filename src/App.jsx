@@ -3,20 +3,21 @@ import Wrapper from './components/Wrapper';
 import View from './components/View';
 import Nav from './components/Nav';
 import Authenticate from './components/Authenticate';
+import UserContext from './contexts/user.context';
+import { useContext } from 'react';
+
 function App() {
 
-  //Hooks 
-
+  const { user } = useContext(UserContext);
 
   return (
-  
     <>
       <Head />
       <Wrapper>
         <View />
         <Nav />
       </Wrapper>
-      <Authenticate/>
+      {!user.isAuth && <Authenticate />}
     </>
   )
 }

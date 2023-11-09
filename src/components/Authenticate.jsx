@@ -1,17 +1,18 @@
 import Modal from "./Modal";
-import { useState } from "react";
-
+import { useState, useContext } from "react";
+import UserContext from "../contexts/user.context";
 
 export default function Authenticate() {
   const [LogOrSign, setLogOrSign] = useState("SignUp");
-  const [message, setMessage] = useState(""); 
+  const [message, setMessage] = useState("");
+  const { user, setUser } = useContext(UserContext);
 
 
   const changeForm = () => {
     setLogOrSign(LogOrSign === "login" ? "SignUp" : "login");
   };
 
-  const handleSubmit = async (event) => {
+  const handleSignin = async (event) => {
     event.preventDefault();
 
     const email = event.target.email.value;
@@ -57,7 +58,7 @@ export default function Authenticate() {
     const email = event.target.email.value;
     const password = event.target.password.value;
     console.log(email, password);
-    
+
     //form
     const formD = new FormData();
     formD.append("email", email);
@@ -74,7 +75,15 @@ export default function Authenticate() {
 
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
+        setMessage(data.message);
+        if (data.success) {
+          console.log(data.user);
+          setUser({
+            id: data.user.id,
+            email: data.user.email,
+            isAuth: true,
+          });
+        }
       } else {
         console.error("Server error:", response.status);
       }
@@ -89,7 +98,7 @@ export default function Authenticate() {
       {LogOrSign === "SignUp" ? (
         <div className="container_form">
           <div className="signUp">
-            <form action="" onSubmit={handleSubmit}>
+            <form action="" onSubmit={handleSignin}>
               <label htmlFor="email">Email</label>
               <input type="text" name="email" />
               <label htmlFor="password">Password</label>

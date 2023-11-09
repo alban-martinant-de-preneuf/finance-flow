@@ -102,7 +102,10 @@ if (isset($_GET['login'])) {
     echo json_encode([
         'message' => 'User logged in.',
         'success' => true,
-        'user' => [$user['id'], $user['email']]
+        'user' => [
+            "id" => $user['id'],
+            "email" => $user['email']
+        ]
     ]);
 }
 
@@ -124,7 +127,8 @@ if (isset($_GET['check-auth'])) {
             echo json_encode([
                 'message' => 'User logged in.',
                 'success' => true,
-                'user' => [$decodedToken->id, $decodedToken->email]]);
+                'user' => [$decodedToken->id, $decodedToken->email]
+            ]);
         } catch (Exception $e) {
             echo json_encode(['message' => 'Not logged in.' . $e, 'success' => false]);
             die();
