@@ -69,6 +69,7 @@ export default function Authenticate() {
         "http://localhost/finance-flow/backend/authentication.php?login=true",
         {
           method: "POST",
+          credentials: "include",
           body: formD,
         }
       );
