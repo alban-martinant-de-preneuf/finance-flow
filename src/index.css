@@ -1,0 +1,50 @@
+/* Google Fonts import */
+@import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+/* GLOBAL VARIABLES */
+:root {
+  /* Colors */
+  --color-bg: #FDF6E4;
+  --primary-color: #AD86F3;
+}
+/* Reset StyleSheet */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  list-style: none;
+  text-decoration: none;
+}
+
+html{
+  background: #FDF6E4;
+}
+
+.blob {
+  display: contents;
+}
+
+
+.main-container{
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+}
+
+
+
+.modal {
+  height: 26vh;
+  width: 50%;
+  padding: 0 20px;
+  background: rgba(255, 255, 255, 0.489);
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.7);
+}

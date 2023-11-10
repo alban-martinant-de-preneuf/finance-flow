@@ -1,7 +1,7 @@
 export default function Head() {
-    return (
-        <header>
-            <h1>MoneyMinder</h1>
-        </header>
-    )
+  return (
+    <header>
+      <h1>Budget Bud</h1>
+    </header>
+  );
 }

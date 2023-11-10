@@ -2,7 +2,7 @@ import Modal from "./Modal";
 import { useState } from "react";
 
 export default function Authenticate() {
-    // Propos + Hooks 
+    // Props + Hooks 
     const [LogOrSign, setLogOrSign] = useState('SignUp');
 //Functions 
 
