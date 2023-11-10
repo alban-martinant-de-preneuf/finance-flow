@@ -15,6 +15,8 @@ function getUser(string $email, PDO $db): ?array
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
+
+//signin 
 if (isset($_GET['signin'])) {
     if (!isset($_POST['email']) || !isset($_POST['password']) || !isset($_POST['passwordConfirm'])) {
         echo json_encode(['message' => 'Please fill in all fields.', 'success' => false]);
@@ -53,6 +55,7 @@ if (isset($_GET['signin'])) {
     echo json_encode(['message' => 'User created.', 'success' => true]);
 }
 
+//login 
 if (isset($_GET['login'])) {
     if (!isset($_POST['email']) || !isset($_POST['password'])) {
         echo json_encode(['message' => 'Please fill in all fields.', 'success' => false]);
@@ -84,7 +87,7 @@ if (isset($_GET['login'])) {
 
     $payload = [
         'iat' => time(),
-        'exp' => time() + 3600,
+        'exp' => time() + 3600 * 24,
         'id' => $user['id'],
         'email' => $user['email']
     ];
@@ -93,15 +96,20 @@ if (isset($_GET['login'])) {
 
     $jwt = JWT::encode($payload, $key, 'HS256');
 
-    setcookie('jwtToken', $jwt, time() + 3600, '/', '', false, true);
+    setcookie('jwtToken', $jwt, time() + 3600 * 24, '/', '', false, true);
 
     echo json_encode([
         'message' => 'User logged in.',
         'success' => true,
-        'user' => [$user['id'], $user['email']]
+        'user' => [
+            "id" => $user['id'],
+            "email" => $user['email']
+        ]
     ]);
 }
 
+
+//logout 
 if (isset($_GET['logout'])) {
     if (isset($_COOKIE['jwtToken'])) {
         setcookie('jwtToken', $_COOKIE['jwtToken'], time(), '/', '', false, true);
@@ -109,6 +117,7 @@ if (isset($_GET['logout'])) {
     echo json_encode(['message' => 'User logged out.', 'success' => true]);
 }
 
+//check auth
 if (isset($_GET['check-auth'])) {
     if (isset($_COOKIE['jwtToken'])) {
         $jwtToken = $_COOKIE['jwtToken'];
@@ -118,7 +127,11 @@ if (isset($_GET['check-auth'])) {
             echo json_encode([
                 'message' => 'User logged in.',
                 'success' => true,
-                'user' => [$decodedToken->id, $decodedToken->email]]);
+                'user' => [
+                    "id" => $decodedToken->id,
+                    "email" => $decodedToken->email
+                ]
+            ]);
         } catch (Exception $e) {
             echo json_encode(['message' => 'Not logged in.' . $e, 'success' => false]);
             die();
