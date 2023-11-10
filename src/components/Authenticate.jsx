@@ -3,10 +3,10 @@ import { useState, useContext } from "react";
 import UserContext from "../contexts/user.context";
 
 export default function Authenticate() {
+    // Props + Hooks 
   const [LogOrSign, setLogOrSign] = useState("SignUp");
   const [message, setMessage] = useState("");
   const { user, setUser } = useContext(UserContext);
-
 
   const changeForm = () => {
     setLogOrSign(LogOrSign === "login" ? "SignUp" : "login");

@@ -1,3 +1,4 @@
+import BlobAnimation from "./components/BlobAnimation";
 import Head from './components/Head';
 import Wrapper from './components/Wrapper';
 import View from './components/View';
@@ -5,6 +6,7 @@ import Nav from './components/Nav';
 import Authenticate from './components/Authenticate';
 import UserContext from './contexts/user.context';
 import { useContext, useEffect } from 'react';
+import "./index.css";
 
 function App() {
 
@@ -39,9 +41,10 @@ function App() {
         <View />
         <Nav />
       </Wrapper>
+      <BlobAnimation />
       {!user.isAuth && <Authenticate />}
     </>
   )
 }
 
-export default App
+export default App;
