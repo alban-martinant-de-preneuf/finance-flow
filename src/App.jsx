@@ -35,7 +35,7 @@ function App() {
   }, []);
 
   return (
-    <>
+    <div className="main-container">
       <Head />
       <Wrapper>
         <View />
@@ -43,7 +43,7 @@ function App() {
       </Wrapper>
       <BlobAnimation />
       {!user.isAuth && <Authenticate />}
-    </>
+    </div>
   )
 }
 
