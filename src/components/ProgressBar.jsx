@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext, useRef } from 'react';
 import { PieChart, Pie, Cell } from 'recharts';
+import UserContext from '../contexts/user.context';
 
 export default function ProgressBar() {
 
@@ -7,7 +8,10 @@ export default function ProgressBar() {
     const [income, setIncome] = useState(0);
     const [expenses, setExpenses] = useState(0);
     const [total, setTotal] = useState(0);
+    const [totalValueMessage, setTotalValueMessage] = useState('');
     const [loading, setLoading] = useState(true);
+    const [pieData, setPieData] = useState([{ name: 'empty', value: 100, color: 'gray' }]);
+    const { user } = useContext(UserContext);
 
     const fetchData = async () => {
         try {
@@ -28,28 +32,40 @@ export default function ProgressBar() {
     }
 
     useEffect(() => {
-        fetchData();
-    }, []);
-
-    useEffect(() => {
-        if (!loading) {
-            setIncome(0);
-            setExpenses(0);
-            for (const entry of dbData) {
-                if (entry.type === 'income') setIncome(prev => prev + entry.amount);
-                if (entry.type === 'expense') setExpenses(prev => prev + entry.amount);
-            }
+        if (user.isAuth) {
+            fetchData();
+        } else {
+            setDbData([]);
+            setLoading(false);
         }
-    }, [dbData, loading]);
+    }, [user])
 
     useEffect(() => {
-        setTotal(income - expenses);
+        setIncome(0);
+        setExpenses(0);
+        for (const entry of dbData) {
+            if (entry.type === 'income') setIncome(prev => prev + entry.amount);
+            if (entry.type === 'expense') setExpenses(prev => prev + entry.amount);
+        }
+    }, [dbData]);
+    
+    useEffect(() => {
+        if (income === 0 && expenses === 0) {
+            setPieData([{ name: 'empty', value: 100, color: 'gray' }]);
+            setTotal(0);
+            setTotalValueMessage('No transactions yet');
+        } else {
+            setPieData([
+                { name: 'add', value: income, color: 'green' },
+                { name: 'min', value: expenses, color: 'red' },
+            ]);
+            setTotal((prevTotal) => income - expenses);
+        }
     }, [income, expenses]);
 
-    const pieData = [
-        { name: 'add', value: income, color: 'green' },
-        { name: 'min', value: expenses, color: 'red' },
-    ];
+    useEffect(() => {
+        setTotalValueMessage(`Total: ${total}€`);
+    }, [total]);
 
     return (
         <>
@@ -71,7 +87,7 @@ export default function ProgressBar() {
                             ))}
                         </Pie>
                     </PieChart>
-                    <p>Total: {total}€</p>
+                    <p>{totalValueMessage}</p>
                 </>
             )}
         </>
