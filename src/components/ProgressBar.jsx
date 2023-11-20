@@ -2,7 +2,7 @@ import { useEffect, useState, useContext, useRef } from 'react';
 import { PieChart, Pie, Cell } from 'recharts';
 import UserContext from '../contexts/user.context';
 
-export default function ProgressBar() {
+export default function ProgressBar({ update }) {
 
     const [dbData, setDbData] = useState([]);
     const [income, setIncome] = useState(0);
@@ -23,13 +23,6 @@ export default function ProgressBar() {
                 }
             });
             const data = await response.json();
-            let income = 0;
-            let expenses = 0;
-            for (const entry of data) {
-                if (entry.type === 'income') income += entry.amount;
-                if (entry.type === 'expense') expenses += entry.amount;
-            }
-            console.log(income, expenses);
             setDbData(data);
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -45,7 +38,7 @@ export default function ProgressBar() {
             setDbData([]);
             setLoading(false);
         }
-    }, [user])
+    }, [user, update])
 
     useEffect(() => {
         setIncome(0);
@@ -55,7 +48,7 @@ export default function ProgressBar() {
             if (entry.type === 'expense') setExpenses(prev => prev + entry.amount);
         }
     }, [dbData]);
-    
+
     useEffect(() => {
         if (income === 0 && expenses === 0) {
             setPieData([{ name: 'empty', value: 100, color: 'gray' }]);
@@ -65,13 +58,14 @@ export default function ProgressBar() {
                 { name: 'rest', value: income - expenses, color: 'green' },
                 { name: 'expense', value: expenses, color: 'red' },
             ]) : setPieData([
-                { name: 'rest', value: expenses - income, color: 'black' },
+                // { name: 'foramination', value: 0, color: 'green'},
                 { name: 'income', value: income, color: 'red' },
+                { name: 'rest', value: expenses - income, color: 'black' },
             ]);
             setTotal(income - expenses);
         }
     }, [income, expenses]);
-    
+
     useEffect(() => {
         if (income === 0 && expenses === 0) {
             setTotalValueMessage('No transactions yet');
@@ -94,6 +88,7 @@ export default function ProgressBar() {
                             innerRadius={90}
                             outerRadius={100}
                             blendStroke
+                            // isAnimationActive={false}
                         >
                             {pieData.map((entry, index) => (
                                 <Cell key={`cell-${index}`} fill={entry.color} />
