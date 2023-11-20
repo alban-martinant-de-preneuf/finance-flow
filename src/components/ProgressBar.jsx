@@ -23,6 +23,13 @@ export default function ProgressBar() {
                 }
             });
             const data = await response.json();
+            let income = 0;
+            let expenses = 0;
+            for (const entry of data) {
+                if (entry.type === 'income') income += entry.amount;
+                if (entry.type === 'expense') expenses += entry.amount;
+            }
+            console.log(income, expenses);
             setDbData(data);
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -53,18 +60,24 @@ export default function ProgressBar() {
         if (income === 0 && expenses === 0) {
             setPieData([{ name: 'empty', value: 100, color: 'gray' }]);
             setTotal(0);
-            setTotalValueMessage('No transactions yet');
         } else {
-            setPieData([
-                { name: 'add', value: income, color: 'green' },
-                { name: 'min', value: expenses, color: 'red' },
+            income > expenses ? setPieData([
+                { name: 'rest', value: income - expenses, color: 'green' },
+                { name: 'expense', value: expenses, color: 'red' },
+            ]) : setPieData([
+                { name: 'rest', value: expenses - income, color: 'black' },
+                { name: 'income', value: income, color: 'red' },
             ]);
-            setTotal((prevTotal) => income - expenses);
+            setTotal(income - expenses);
         }
     }, [income, expenses]);
-
+    
     useEffect(() => {
-        setTotalValueMessage(`Total: ${total}€`);
+        if (income === 0 && expenses === 0) {
+            setTotalValueMessage('No transactions yet');
+        } else {
+            setTotalValueMessage(`Total: ${total}€`);
+        }
     }, [total]);
 
     return (
