@@ -7,6 +7,7 @@ import Authenticate from './components/Authenticate';
 import UserContext from './contexts/user.context';
 import { useContext, useEffect } from 'react';
 import "./index.css";
+import AddTransacForm from "./components/AddTransacForm";
 
 function App() {
 
@@ -41,7 +42,7 @@ function App() {
         <View />
         <Nav />
       </Wrapper>
-      <BlobAnimation />
+      {/* <BlobAnimation /> */}
       {!user.isAuth && <Authenticate />}
     </div>
   )

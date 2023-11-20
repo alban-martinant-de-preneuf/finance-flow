@@ -1,6 +1,7 @@
 import Modal from "./Modal";
+import { useState } from "react";
 
-export default function AddTransacForm() {
+export default function AddTransacForm({ setShowTransacForm, setUpdated }) {
 
     const categories = [
         "Food",
@@ -12,9 +13,11 @@ export default function AddTransacForm() {
         "Other",
     ];
 
+    const [ message, setMessage ] = useState('');
+
     const handleAddTransac = async (e) => {
         e.preventDefault();
-        
+
         const title = e.target.title.value;
         const type = e.target.type.value;
         const frequency = e.target.frequency.value;
@@ -44,6 +47,13 @@ export default function AddTransacForm() {
             );
             const data = await response.json();
             console.log(data);
+            setMessage(data.message);
+            if (data.success) {
+                setUpdated(prev => prev + 1);
+                setTimeout(() => {
+                    setShowTransacForm(false);
+                }, 2000);
+            }
 
         } catch (error) {
             console.error("Network error:", error);
@@ -54,6 +64,10 @@ export default function AddTransacForm() {
         <>
             <Modal>
                 <div className="container_form">
+                    <button className="close_form" onClick={() => setShowTransacForm(false)}>X</button>
+                    <p className="message">
+                        {message}
+                    </p>
                     <div className="add_transc_form">
                         <form action="" onSubmit={handleAddTransac}>
                             <div className="input_form">
@@ -62,9 +76,9 @@ export default function AddTransacForm() {
                             </div>
                             <div className="input_form">
                                 <label htmlFor="income">+</label>
-                                <input type="radio" id="income" name="type" value="income"/>
+                                <input type="radio" id="income" name="type" value="income" />
                                 <label htmlFor="expense">-</label>
-                                <input type="radio" id="expense" name="type" value="expense"/>
+                                <input type="radio" id="expense" name="type" value="expense" />
                             </div>
                             <div className="input_form">
                                 <label htmlFor="frequency">Frequency</label>
