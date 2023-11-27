@@ -75,6 +75,8 @@ export default function Authenticate() {
       if (response.ok) {
         const data = await response.json();
         console.log(data);
+        console.log(data.message);
+        console.log(data.success);
       } else {
         console.error("Server error:", response.status);
       }

@@ -3,6 +3,10 @@
 use \Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 
+//look what's firebase ? / JWT 
+
+
+
 require_once 'dbConnection.php';
 
 function getUser(string $email, PDO $db): ?array
