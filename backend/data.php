@@ -27,13 +27,28 @@ if (isset($_POST)) {
 }
 
 if (isset($_GET['get-transactions'])) {
+
+    $month = 0;
+    if (isset($_GET['month'])) {
+        $month = (int) $_GET['month'];
+    }
+
     $query = ('SELECT * FROM transaction
         WHERE id_user = :user_id');
+
+    if ($month <= 12 && $month >= 1) {
+        $query .= ' AND MONTH(date) = :month';
+    }
+
     if (isset($_GET['recurent_only'])) {
         $query .= ' AND frequency != "once"';
     }
+
     $stmt = $db->prepare($query);
-    $stmt->execute(['user_id' => $decodedToken->id]);
+    $stmt->execute([
+        'user_id' => $decodedToken->id,
+        'month' => $month
+    ]);
     $transactions = $stmt->fetchAll(PDO::FETCH_ASSOC);
     echo json_encode($transactions);
 }

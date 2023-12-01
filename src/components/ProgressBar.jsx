@@ -2,6 +2,11 @@ import { useEffect, useState, useContext, useRef } from 'react';
 import { PieChart, Pie, Cell } from 'recharts';
 import UserContext from '../contexts/user.context';
 
+const monthNames = [
+    'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September',
+    'October', 'November', 'December',
+];
+
 export default function ProgressBar({ update }) {
 
     const [dbData, setDbData] = useState([]);
@@ -12,10 +17,13 @@ export default function ProgressBar({ update }) {
     const [loading, setLoading] = useState(true);
     const [pieData, setPieData] = useState([{ name: 'empty', value: 100, color: 'gray' }]);
     const { user } = useContext(UserContext);
+    const [month, setMonth] = useState(0);
 
     const fetchData = async () => {
+        const date = new Date();
+        setMonth(date.getMonth());
         try {
-            const response = await fetch('http://localhost/finance-flow/backend/data.php?get-transactions', {
+            const response = await fetch('http://localhost/finance-flow/backend/data.php?get-transactions&month=' + month + 1, {
                 method: 'GET',
                 credentials: 'include',
                 headers: {
@@ -88,14 +96,17 @@ export default function ProgressBar({ update }) {
                             innerRadius={90}
                             outerRadius={100}
                             blendStroke
-                            // isAnimationActive={false}
+                        // isAnimationActive={false}
                         >
                             {pieData.map((entry, index) => (
                                 <Cell key={`cell-${index}`} fill={entry.color} />
                             ))}
                         </Pie>
                     </PieChart>
-                    <p>{totalValueMessage}</p>
+                    <div>
+                        <h5>{monthNames[month]}</h5>
+                        {totalValueMessage}
+                    </div>
                 </>
             )}
         </>
