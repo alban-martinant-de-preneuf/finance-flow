@@ -23,7 +23,7 @@ export default function ProgressBar({ update }) {
         const date = new Date();
         setMonth(date.getMonth());
         try {
-            const response = await fetch('http://localhost/finance-flow/backend/data.php?get-transactions&month=' + month + 1, {
+            const response = await fetch('http://localhost/finance-flow/backend/data.php?get-transactions&month=' + (parseInt(month) + 1), {
                 method: 'GET',
                 credentials: 'include',
                 headers: {
@@ -87,7 +87,7 @@ export default function ProgressBar({ update }) {
             {loading ? (
                 <p>Loading...</p>
             ) : (
-                <>
+                <section className="progress-bar">
                     <PieChart width={400} height={400}>
                         <Pie
                             data={pieData}
@@ -103,11 +103,11 @@ export default function ProgressBar({ update }) {
                             ))}
                         </Pie>
                     </PieChart>
-                    <div>
+                    <div className="total-value">
                         <h5>{monthNames[month]}</h5>
-                        {totalValueMessage}
+                        <p>{totalValueMessage}</p>
                     </div>
-                </>
+                </section>
             )}
         </>
     );

@@ -45,10 +45,13 @@ if (isset($_GET['get-transactions'])) {
     }
 
     $stmt = $db->prepare($query);
-    $stmt->execute([
-        'user_id' => $decodedToken->id,
-        'month' => $month
-    ]);
+    $stmt->bindParam(':user_id', $decodedToken->id);
+
+    if ($month <= 12 && $month >= 1) {
+        $stmt->bindParam(':month', $month);
+    }
+    
+    $stmt->execute();
     $transactions = $stmt->fetchAll(PDO::FETCH_ASSOC);
     echo json_encode($transactions);
 }
