@@ -40,7 +40,9 @@ export default function ProgressBar({ update }) {
     }
 
     useEffect(() => {
+        console.log('update');
         if (user.isAuth) {
+            console.log('fetching data');
             fetchData();
         } else {
             setDbData([]);
@@ -88,11 +90,11 @@ export default function ProgressBar({ update }) {
                 <p>Loading...</p>
             ) : (
                 <section className="progress-bar">
-                    <PieChart width={400} height={400}>
+                    <PieChart width={300} height={300}>
                         <Pie
                             data={pieData}
-                            cx={200}
-                            cy={200}
+                            cx={150}
+                            cy={150}
                             innerRadius={90}
                             outerRadius={100}
                             blendStroke

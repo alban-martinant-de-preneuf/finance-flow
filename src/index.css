@@ -20,31 +20,149 @@ html{
   background: #FDF6E4;
 }
 
+body {
+  font-family: "League Spartan", sans-serif;
+  font-size: 1rem;
+  color: #722ef0;
+  padding: 7px;;
+}
+
 .blob {
   display: contents;
 }
 
+header {
+  width: 100%;
+}
+
+header h1 {
+  text-align: center;
+  margin-bottom: 15px;
+}
 
 .main-container{
+  position: relative;
   height: 100vh;
   width: 100%;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
-  
 }
 
-
+/* REGISTRATION MODAL Start*/
+h3 {
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin-bottom: 10px;
+  text-align: center;
+}
 
 .modal {
-  height: 26vh;
-  width: 50%;
-  padding: 0 20px;
-  background: rgba(255, 255, 255, 0.489);
+  height: 50vh;
+  max-width: 40%;
+  padding: 20px 20px;
+  margin: 20px 20px;
   z-index: 10;
   display: flex;
   justify-content: center;
   align-items: center;
+  background: rgba(253, 246, 228, 0.741);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 10px;
+  border: 2px solid var(--color-bg);
+  color: #722ef0;
+  font-family: "League Spartan", sans-serif;
+  position: absolute;
+}
+
+.modal form {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
+}
+
+.modal form label {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin: 8px 0;
+  align-items: start;
+}
+
+.modal form input {
+  margin: 10px 0;
+  padding: 10px 10px;
+  border-radius: 10px;
+  border: 2px solid var(--color-bg);
+  outline: none;
+  font-family: "League Spartan", sans-serif;
+  font-size: 1.2rem;
+  color: #722ef0;
+}
+
+.SignUp-btn {
+  padding: 5px 5px;
+  border-radius: 10px;
+  border: 2px solid var(--color-bg);
+  outline: none;
+  font-family: "League Spartan", sans-serif;
+  font-size: 1rem;
+  color: var(--color-bg);
+  background: var(--primary-color);
+  cursor: pointer;
+}
+
+.container-form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* REGISTRATION MODAL End*/
+
+.progress-bar {
+  position: relative;
+}
+
+.total-value {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  justify-content: center;
+}
+
+.wrapper {
+  border: 3px solid white;
   border-radius: 20px;
-  border: 2px solid rgba(255, 255, 255, 0.7);
+  background-color: #ffffff96;
+  width: 100%;
+  max-width: 100%;
+  padding: 15px;
+}
+
+.nav-list {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  height: 100%;
+  width: 100%;
+}
+
+.nav-element {
+  cursor: pointer;
+}
+
+recharts-wrapper {
+  margin: auto;
 }

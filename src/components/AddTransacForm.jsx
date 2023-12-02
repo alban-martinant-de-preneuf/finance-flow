@@ -1,7 +1,7 @@
 import Modal from "./Modal";
 import { useState } from "react";
 
-export default function AddTransacForm({ setShowTransacForm, setUpdated }) {
+export default function AddTransacForm({ setShowTransacForm, updateChart }) {
 
     const categories = [
         "Food",
@@ -49,7 +49,8 @@ export default function AddTransacForm({ setShowTransacForm, setUpdated }) {
             console.log(data);
             setMessage(data.message);
             if (data.success) {
-                setUpdated(prev => prev + 1);
+                console.log("Transaction added");
+                updateChart();
                 setTimeout(() => {
                     setShowTransacForm(false);
                 }, 2000);

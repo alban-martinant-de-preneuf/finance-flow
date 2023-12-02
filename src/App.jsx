@@ -2,16 +2,21 @@ import BlobAnimation from "./components/BlobAnimation";
 import Head from './components/Head';
 import Wrapper from './components/Wrapper';
 import View from './components/View';
-import Nav from './components/Nav';
 import Authenticate from './components/Authenticate';
 import UserContext from './contexts/user.context';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import "./index.css";
-import AddTransacForm from "./components/AddTransacForm";
+import Foot from "./components/Foot";
 
 function App() {
 
   const { user, setUser } = useContext(UserContext);
+  const [update, setUpdated] = useState(0);
+
+  const updateChart = () => {
+    console.log('updating chart');
+    setUpdated(prev => prev + 1);
+  }
 
   const checkConnection = async () => {
     const response = await fetch('http://localhost/finance-flow/backend/authentication.php?check-auth=true', {
@@ -37,13 +42,17 @@ function App() {
 
   return (
     <div className="main-container">
-      <Head />
-      <Wrapper>
-        <View />
-        <Nav />
-      </Wrapper>
-      {/* <BlobAnimation /> */}
       {!user.isAuth && <Authenticate />}
+      <Wrapper>
+        <Head />
+      </Wrapper>
+      <Wrapper>
+        <View update={update} />
+      </Wrapper>
+      <Wrapper>
+        <Foot updateChart={updateChart} />
+      </Wrapper>
+      <BlobAnimation />
     </div>
   )
 }
