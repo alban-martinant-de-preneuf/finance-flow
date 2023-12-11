@@ -4,12 +4,12 @@ import UserContext from "../contexts/user.context";
 
 export default function Authenticate() {
     // Props + Hooks 
-  const [LogOrSign, setLogOrSign] = useState("SignUp");
+  const [LoginOrSignup, setLogOrSign] = useState("login");
   const [message, setMessage] = useState("");
   const { user, setUser } = useContext(UserContext);
 
   const changeForm = () => {
-    setLogOrSign(LogOrSign === "login" ? "SignUp" : "login");
+    setLogOrSign(LoginOrSignup === "login" ? "signUp" : "login");
   };
 
   const handleSignin = async (event) => {
@@ -96,9 +96,10 @@ export default function Authenticate() {
   //Return
   return (
     <Modal>
-      {LogOrSign === "SignUp" ? (
+      {LoginOrSignup === "signUp" ? (
         <div className="container_form">
           <div className="signUp">
+            <h2>Sign Up</h2>
             <form action="" onSubmit={handleSignin}>
               <label htmlFor="email">Email</label>
               <input type="text" name="email" />
@@ -108,19 +109,20 @@ export default function Authenticate() {
               <input type="password" name="passwordConfirm" />
               <button>Sign Up</button>
             </form>
-            <button onClick={changeForm}>Already Have A Count ?</button>
+            <button onClick={changeForm}>Already have an account ?</button>
             <p>{message}</p>
           </div>
         </div>
       ) : (
         <div className="signIn">
+          <h2>Sign In</h2>
           <form action="" onSubmit={handleLog}>
             <label htmlFor="email_sign_in">Email</label>
             <input type="text" name="email" />
             <label htmlFor="password">Password</label>
             <input type="password" name="password" />
             <button>Sign in</button>
-            <button onClick={changeForm}>Forgot Password ?</button>
+            <button onClick={changeForm}>Don't have an account ?</button>
           </form>
         </div>
       )}

@@ -21,9 +21,10 @@ export default function ProgressBar({ update }) {
 
     const fetchData = async () => {
         const date = new Date();
+        const updatedMonth = date.getMonth();
         setMonth(date.getMonth());
         try {
-            const response = await fetch('http://localhost/finance-flow/backend/data.php?get-transactions&month=' + (parseInt(month) + 1), {
+            const response = await fetch('http://localhost/finance-flow/backend/data.php?get-transactions&month=' + (parseInt(updatedMonth) + 1), {
                 method: 'GET',
                 credentials: 'include',
                 headers: {
