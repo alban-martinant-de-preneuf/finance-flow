@@ -55,10 +55,34 @@ if (isset($_GET['get-transactions'])) {
     if ($month <= 12 && $month >= 1) {
         $stmt->bindParam(':month', $month);
     }
-    
+
     $stmt->execute();
     $transactions = $stmt->fetchAll(PDO::FETCH_ASSOC);
     echo json_encode($transactions);
+}
+
+if (isset($_GET['get-previous-budget'])) {
+    if (isset($_GET['month']) && isset($_GET['year'])) {
+        $target_date = $_GET['year'] . '-' . $_GET['month'] . '-01';
+    } else {
+        $target_date = date('Y-m-d');
+    }
+
+    $stmt = $db->prepare('
+        SELECT 
+        SUM(CASE WHEN type = "income" THEN amount ELSE 0 END) AS total_income,
+        SUM(CASE WHEN type = "expense" THEN amount ELSE 0 END) AS total_expense
+        FROM transaction
+        WHERE id_user = :user_id 
+        AND DATE(date) < :target_date
+    ');
+    $stmt->execute([
+        'user_id' => $decodedToken->id,
+        'target_date' => $target_date
+    ]);
+    $previous_budget = $stmt->fetch(PDO::FETCH_ASSOC);
+    $remaining = $previous_budget['total_income'] - $previous_budget['total_expense'];
+    echo json_encode($previous_budget + ['remaining' => $remaining]);
 }
 
 if (isset($_GET['add-transaction'])) {
@@ -68,7 +92,8 @@ if (isset($_GET['add-transaction'])) {
     }
     $stmt = $db->prepare(
         'INSERT INTO transaction (type, frequency, title, date, description, id_category, id_user, amount)
-        VALUES (:type, :frequency, :title, :date, :description, :id_category, :id_user, :amount)');
+        VALUES (:type, :frequency, :title, :date, :description, :id_category, :id_user, :amount)'
+    );
     $stmt->execute([
         'type' => $_POST['type'],
         'frequency' => $_POST['frequency'],
@@ -99,7 +124,8 @@ if (isset($_GET['modif-transaction']) && isset($_GET['id'])) {
     }
     $stmt = $db->prepare(
         'UPDATE transaction SET type = :type, frequency = :frequency, title = :title, date = :date, description = :description, id_category = :id_category, amount = :amount
-        WHERE id = :id AND id_user = :user_id');
+        WHERE id = :id AND id_user = :user_id'
+    );
     $stmt->execute([
         'type' => $_POST['type'],
         'frequency' => $_POST['frequency'],
