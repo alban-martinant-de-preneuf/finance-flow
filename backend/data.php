@@ -40,6 +40,11 @@ if (isset($_GET['get-transactions'])) {
         $query .= ' AND MONTH(date) = :month';
     }
 
+    if ($month <= -1 && $month >= -12) {
+        $month = abs($month);
+        $query .= ' AND MONTH(date) <> :month';
+    }
+
     if (isset($_GET['recurent_only'])) {
         $query .= ' AND frequency != "once"';
     }
