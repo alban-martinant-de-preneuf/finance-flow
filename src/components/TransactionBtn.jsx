@@ -1,6 +1,6 @@
 export default function TransactionBtn({ type, handleTransac }) {
     return (
-        <button className={`transaction-btn-${type}`} onClick={handleTransac}>
+        <button className={`transaction-btn`} onClick={handleTransac}>
             {type === 'sub' ? '-' : '+'}
         </button>
     )
