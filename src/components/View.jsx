@@ -1,10 +1,10 @@
 import ProgressBar from './ProgressBar';
 
-export default function View({ update }) {
+export default function View({ update, setTotal, total }) {
 
     return (
         <main>
-            <ProgressBar update={update} />
+            <ProgressBar update={update} setTotal={setTotal} total={total} />
         </main>
     )
 }

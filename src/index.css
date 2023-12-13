@@ -48,6 +48,8 @@ header h1 {
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+  max-width: 800px;
+  margin: auto;
 }
 
 /* REGISTRATION MODAL Start*/
@@ -165,4 +167,50 @@ h3 {
 
 .recharts-wrapper {
   margin: auto;
+}
+
+.transac-btns, .infos {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--primary-color);
+  justify-content: space-around;
+  align-items: flex-start;
+  position: relative;
+}
+
+.transac-btns {
+  height: 0;
+}
+
+.transac-btns :first-child {
+  background-color: red;
+}
+
+.transac-btns :last-child {
+  background-color: green;
+}
+
+.transaction-btn {
+  color: var(--color-bg);
+  font-size: 2rem;
+  border: none;
+  cursor: pointer;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  position: relative;
+  top: -45px;
+}
+
+.infos div {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.infos h4 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin-top: 8px;
 }

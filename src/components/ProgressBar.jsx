@@ -1,6 +1,7 @@
 import { useEffect, useState, useContext, useRef } from 'react';
 import { PieChart, Pie, Cell } from 'recharts';
 import UserContext from '../contexts/user.context';
+import BudgetContext from '../contexts/budget.context';
 
 const monthNames = [
     'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September',
@@ -10,13 +11,17 @@ const monthNames = [
 export default function ProgressBar({ update }) {
 
     const [dbData, setDbData] = useState([]);
-    const [income, setIncome] = useState(0);
-    const [expenses, setExpenses] = useState(0);
     const [total, setTotal] = useState(0);
     const [totalValueMessage, setTotalValueMessage] = useState('');
     const [loading, setLoading] = useState(true);
     const [pieData, setPieData] = useState([{ name: 'empty', value: 100, color: 'gray' }]);
     const { user } = useContext(UserContext);
+    const { monthIncomes,
+        setMonthIncomes,
+        monthExpenses,
+        setMonthExpenses,
+        prevBudget,
+    } = useContext(BudgetContext);
     const [month, setMonth] = useState(0);
 
     const fetchData = async () => {
@@ -52,33 +57,41 @@ export default function ProgressBar({ update }) {
     }, [user, update])
 
     useEffect(() => {
-        setIncome(0);
-        setExpenses(0);
+        setMonthIncomes(0);
+        setMonthExpenses(0);
         for (const entry of dbData) {
-            if (entry.type === 'income') setIncome(prev => prev + entry.amount);
-            if (entry.type === 'expense') setExpenses(prev => prev + entry.amount);
+            if (entry.type === 'income') setMonthIncomes(prev => prev + entry.amount);
+            if (entry.type === 'expense') setMonthExpenses(prev => prev + entry.amount);
         }
     }, [dbData]);
 
     useEffect(() => {
-        if (income === 0 && expenses === 0) {
+        const monthBudget = prevBudget + monthIncomes;
+        const expensesPercentage = monthExpenses / monthBudget * 100;
+        let remainingPercentage = 100 - expensesPercentage;
+        if (monthIncomes === 0 && monthExpenses === 0) {
             setPieData([{ name: 'empty', value: 100, color: 'gray' }]);
             setTotal(0);
         } else {
-            income > expenses ? setPieData([
-                { name: 'rest', value: income - expenses, color: 'green' },
-                { name: 'expense', value: expenses, color: 'red' },
-            ]) : setPieData([
-                // { name: 'foramination', value: 0, color: 'green'},
-                { name: 'income', value: income, color: 'red' },
-                { name: 'rest', value: expenses - income, color: 'black' },
-            ]);
-            setTotal(income - expenses);
+            if (expensesPercentage <= 100) {
+                setPieData([
+                    { value: remainingPercentage, color: 'green' },
+                    { value: expensesPercentage, color: 'red' },
+                ]);
+            } else {
+                const exededPercentage = expensesPercentage - 100;
+                remainingPercentage = 100 - exededPercentage;
+                setPieData([
+                    { value: remainingPercentage, color: 'red' },
+                    { value: exededPercentage, color: 'black' },
+                ]);
+            }
+            setTotal(monthBudget - monthExpenses);
         }
-    }, [income, expenses]);
+    }, [monthIncomes, monthExpenses]);
 
     useEffect(() => {
-        if (income === 0 && expenses === 0) {
+        if (monthIncomes === 0 && monthExpenses === 0) {
             setTotalValueMessage('No transactions yet');
         } else {
             setTotalValueMessage(`Total: ${total}€`);
@@ -94,8 +107,8 @@ export default function ProgressBar({ update }) {
                     <PieChart width={300} height={300}>
                         <Pie
                             data={pieData}
-                            cx={150}
-                            cy={150}
+                            cx={145}
+                            cy={145}
                             innerRadius={90}
                             outerRadius={100}
                             blendStroke

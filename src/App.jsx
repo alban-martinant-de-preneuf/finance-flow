@@ -12,6 +12,7 @@ function App() {
 
   const { user, setUser } = useContext(UserContext);
   const [update, setUpdated] = useState(0);
+  const [total, setTotal] = useState(0);
 
   const updateChart = () => {
     console.log('updating chart');
@@ -47,12 +48,12 @@ function App() {
         <Head />
       </Wrapper>
       <Wrapper>
-        <View update={update} />
+        <View update={update} setTotal={setTotal} total={total} />
       </Wrapper>
       <Wrapper>
-        <Foot updateChart={updateChart} />
+        <Foot updateChart={updateChart} total={total} />
       </Wrapper>
-      <BlobAnimation />
+      {/* <BlobAnimation /> */}
     </div>
   )
 }
