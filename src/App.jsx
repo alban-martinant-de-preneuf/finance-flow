@@ -7,12 +7,14 @@ import UserContext from './contexts/user.context';
 import { useContext, useEffect, useState } from 'react';
 import "./index.css";
 import Foot from "./components/Foot";
+import AddTransacForm from "./components/AddTransacForm";
 
 function App() {
 
   const { user, setUser } = useContext(UserContext);
   const [update, setUpdated] = useState(0);
   const [total, setTotal] = useState(0);
+  const [showTransacForm, setShowTransacForm] = useState(false);
 
   const updateChart = () => {
     console.log('updating chart');
@@ -44,15 +46,18 @@ function App() {
   return (
     <div className="main-container">
       {!user.isAuth && <Authenticate />}
+      {showTransacForm && <AddTransacForm setShowTransacForm={setShowTransacForm} updateChart={updateChart} />}
       <Wrapper>
         <Head />
       </Wrapper>
+      <section className="main-section">
       <Wrapper>
         <View update={update} setTotal={setTotal} total={total} />
       </Wrapper>
       <Wrapper>
-        <Foot updateChart={updateChart} total={total} />
+        <Foot setShowTransacForm={setShowTransacForm} />
       </Wrapper>
+      </section>
       {/* <BlobAnimation /> */}
     </div>
   )

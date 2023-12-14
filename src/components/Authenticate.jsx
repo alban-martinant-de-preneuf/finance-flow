@@ -3,7 +3,7 @@ import { useState, useContext } from "react";
 import UserContext from "../contexts/user.context";
 
 export default function Authenticate() {
-    // Props + Hooks 
+  // Props + Hooks 
   const [LoginOrSignup, setLogOrSign] = useState("login");
   const [message, setMessage] = useState("");
   const { user, setUser } = useContext(UserContext);
@@ -42,6 +42,12 @@ export default function Authenticate() {
         const data = await response.json();
         setMessage(data.message)
         console.log(data);
+        if (data.success) {
+          setTimeout(() => {
+            setMessage("");
+            setLogOrSign("login");
+          }, 2000);
+        }
       } else {
         console.error("Server error:", response.status);
       }

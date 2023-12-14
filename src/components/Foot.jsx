@@ -1,11 +1,8 @@
 import TransactionBtn from './TransactionBtn';
-import AddTransacForm from "./AddTransacForm";
-import { useState, useEffect, useContext } from 'react';
+import { useEffect, useContext } from 'react';
 import BudgetContext from '../contexts/budget.context';
 
-export default function Foot({ updateChart, budget }) {
-
-    const [showTransacForm, setShowTransacForm] = useState(false);
+export default function Foot({ setShowTransacForm }) {
 
     const handleTransac = (e) => {
         e.preventDefault();
@@ -30,7 +27,9 @@ export default function Foot({ updateChart, budget }) {
             );
             const data = await response.json();
             console.log(data);
-            setPrevBudget(data.remaining);
+            if (data.success) {
+                setPrevBudget(data.remaining);
+            }
         } catch (error) {
             console.error("Network error:", error);
         }
@@ -46,7 +45,6 @@ export default function Foot({ updateChart, budget }) {
                 <TransactionBtn type="sub" handleTransac={handleTransac} />
                 <TransactionBtn type="add" handleTransac={handleTransac} />
             </div>
-            {showTransacForm && <AddTransacForm setShowTransacForm={setShowTransacForm} updateChart={updateChart} />}
             <div className='infos'>
                 <div className='spends'>
                     <p>${monthExpenses}</p>
@@ -55,7 +53,7 @@ export default function Foot({ updateChart, budget }) {
                 <div className='budjet'>
                     <p>${prevBudget + monthIncomes}</p>
                     <h4>Budget</h4>
-               </div>
+                </div>
             </div>
         </footer>
     )

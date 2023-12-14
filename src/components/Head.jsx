@@ -26,7 +26,7 @@ export default function Head() {
 
     return (
         <header>
-            <h1>BudjetBud</h1>
+            <h1>BudgetBud</h1>
             <Nav handleLogout={handleLogout} />
         </header >
     )
