@@ -86,13 +86,13 @@ if (isset($_GET['get-previous-budget'])) {
 }
 
 if (isset($_GET['add-transaction'])) {
+    var_dump($_POST);
     if ((!isset($_POST['type']) || !isset($_POST['frequency']) || !isset($_POST['title']) || !isset($_POST['date']) || !isset($_POST['description']) || !isset($_POST['id_category']) || !isset($_POST['amount']))
-        || (empty($_POST['type']) || empty($_POST['frequency']) || empty($_POST['title']) || empty($_POST['date']) || empty($_POST['description']) || empty($_POST['id_category']) || empty($_POST['amount']))) {      
-        echo json_encode(['message' => 'Missing data. Verify the fields', 'success' => false]);
+        || (empty($_POST['type']) || empty($_POST['frequency']) || empty($_POST['title']) || empty($_POST['date']) || empty($_POST['id_category']) || empty($_POST['amount']))) {      
+        echo json_encode(['message' => 'Missing data.', 'success' => false]);
         die();
     }
     try {
-        echo (gettype($_POST['type']));
         $stmt = $db->prepare(
             'INSERT INTO transaction (type, frequency, title, date, description, id_category, id_user, amount)
             VALUES (:type, :frequency, :title, :date, :description, :id_category, :id_user, :amount)'
