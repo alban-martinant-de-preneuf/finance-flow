@@ -15,6 +15,7 @@ function App() {
   const [update, setUpdated] = useState(0);
   const [total, setTotal] = useState(0);
   const [showTransacForm, setShowTransacForm] = useState(false);
+  const [transacType, setTransacType] = useState('');
 
   const updateChart = () => {
     console.log('updating chart');
@@ -46,7 +47,7 @@ function App() {
   return (
     <div className="main-container">
       {!user.isAuth && <Authenticate />}
-      {showTransacForm && <AddTransacForm setShowTransacForm={setShowTransacForm} updateChart={updateChart} />}
+      {showTransacForm && <AddTransacForm setShowTransacForm={setShowTransacForm} updateChart={updateChart} transacType={transacType} />}
       <Wrapper>
         <Head />
       </Wrapper>
@@ -55,7 +56,7 @@ function App() {
         <View update={update} setTotal={setTotal} total={total} />
       </Wrapper>
       <Wrapper>
-        <Foot setShowTransacForm={setShowTransacForm} />
+        <Foot setShowTransacForm={setShowTransacForm} setTransacType={setTransacType} />
       </Wrapper>
       </section>
       {/* <BlobAnimation /> */}

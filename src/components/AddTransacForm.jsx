@@ -1,7 +1,7 @@
 import Modal from "./Modal";
 import { useState } from "react";
 
-export default function AddTransacForm({ setShowTransacForm, updateChart }) {
+export default function AddTransacForm({ setShowTransacForm, updateChart, transacType }) {
 
     const categories = [
         "Food",
@@ -19,7 +19,7 @@ export default function AddTransacForm({ setShowTransacForm, updateChart }) {
         e.preventDefault();
 
         const title = e.target.title.value;
-        const type = e.target.type.value;
+        const type = transacType === 'add' ? 'income' : 'expense';
         const frequency = e.target.frequency.value;
         const amount = e.target.amount.value;
         const date = e.target.date.value;
@@ -66,6 +66,7 @@ export default function AddTransacForm({ setShowTransacForm, updateChart }) {
             <Modal>
                 <div className="container_form">
                     <button className="close_form" onClick={() => setShowTransacForm(false)}>X</button>
+                    <h3 className="title_form">{transacType === 'add' ? 'Add an income' : 'Add an expense'}</h3>
                     <p className="message">
                         {message}
                     </p>
@@ -74,12 +75,6 @@ export default function AddTransacForm({ setShowTransacForm, updateChart }) {
                             <div className="input_form">
                                 <label htmlFor="type">Titre</label>
                                 <input type="text" name="title" id="title" />
-                            </div>
-                            <div className="input_form">
-                                <label htmlFor="income">+</label>
-                                <input type="radio" id="income" name="type" value="income" />
-                                <label htmlFor="expense">-</label>
-                                <input type="radio" id="expense" name="type" value="expense" />
                             </div>
                             <div className="input_form">
                                 <label htmlFor="frequency">Frequency</label>

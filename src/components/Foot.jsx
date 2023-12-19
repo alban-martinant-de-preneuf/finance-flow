@@ -2,10 +2,11 @@ import TransactionBtn from './TransactionBtn';
 import { useEffect, useContext } from 'react';
 import BudgetContext from '../contexts/budget.context';
 
-export default function Foot({ setShowTransacForm }) {
+export default function Foot({ setShowTransacForm, setTransacType }) {
 
     const handleTransac = (e) => {
         e.preventDefault();
+        setTransacType(e.target.name.split('-')[0]);
         setShowTransacForm(true);
     }
 
