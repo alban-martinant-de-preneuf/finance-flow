@@ -1,13 +1,16 @@
-import NavBtn from './NavBtn';
-
-export default function Nav() {
+export default function Nav({ handleLogout }) {
     return (
         <nav>
-            <ul>
-                <NavBtn type="home" />
-                <NavBtn type="transactions" />
-                <NavBtn type="recurrent" />
-                <NavBtn type="settings" />
+            <ul className="nav-list">
+                <li className="nav-element">
+                    Home
+                </li>
+                <li className="nav-element">
+                    History
+                </li>
+                <li onClick={handleLogout} className="nav-element">
+                    Logout
+                </li>
             </ul>
         </nav>
     )

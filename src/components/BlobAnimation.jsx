@@ -41,7 +41,7 @@ const moveBlob2 = keyframes`
 
 const Blob = styled.div`
   position: absolute;
-  z-index: 1;
+  z-index: -1;
   width: 500px;
   height: 500px;
   background: linear-gradient(

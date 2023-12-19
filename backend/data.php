@@ -27,36 +27,90 @@ if (isset($_POST)) {
 }
 
 if (isset($_GET['get-transactions'])) {
+
+    $month = 0;
+    if (isset($_GET['month'])) {
+        $month = (int) $_GET['month'];
+    }
+
     $query = ('SELECT * FROM transaction
         WHERE id_user = :user_id');
+
+    if ($month <= 12 && $month >= 1) {
+        $query .= ' AND MONTH(date) = :month';
+    }
+
+    if ($month <= -1 && $month >= -12) {
+        $month = abs($month);
+        $query .= ' AND MONTH(date) <> :month';
+    }
+
     if (isset($_GET['recurent_only'])) {
         $query .= ' AND frequency != "once"';
     }
+
     $stmt = $db->prepare($query);
-    $stmt->execute(['user_id' => $decodedToken->id]);
+    $stmt->bindParam(':user_id', $decodedToken->id);
+
+    if ($month <= 12 && $month >= 1) {
+        $stmt->bindParam(':month', $month);
+    }
+
+    $stmt->execute();
     $transactions = $stmt->fetchAll(PDO::FETCH_ASSOC);
     echo json_encode($transactions);
 }
 
+if (isset($_GET['get-previous-budget'])) {
+    if (isset($_GET['month']) && isset($_GET['year'])) {
+        $target_date = $_GET['year'] . '-' . $_GET['month'] . '-01';
+    } else {
+        $target_date = date('Y-m-d');
+    }
+
+    $stmt = $db->prepare('
+        SELECT 
+        SUM(CASE WHEN type = "income" THEN amount ELSE 0 END) AS total_income,
+        SUM(CASE WHEN type = "expense" THEN amount ELSE 0 END) AS total_expense
+        FROM transaction
+        WHERE id_user = :user_id 
+        AND DATE(date) < :target_date
+    ');
+    $stmt->execute([
+        'user_id' => $decodedToken->id,
+        'target_date' => $target_date
+    ]);
+    $previous_budget = $stmt->fetch(PDO::FETCH_ASSOC);
+    $remaining = $previous_budget['total_income'] - $previous_budget['total_expense'];
+    echo json_encode($previous_budget + ['remaining' => $remaining]);
+}
+
 if (isset($_GET['add-transaction'])) {
-    if (!isset($_POST['type']) || !isset($_POST['frequency']) || !isset($_POST['title']) || !isset($_POST['date']) || !isset($_POST['description']) || !isset($_POST['id_category']) || !isset($_POST['amount'])) {
-        echo json_encode(['message' => 'Missing data.', 'success' => false]);
+    if ((!isset($_POST['type']) || !isset($_POST['frequency']) || !isset($_POST['title']) || !isset($_POST['date']) || !isset($_POST['description']) || !isset($_POST['id_category']) || !isset($_POST['amount']))
+        || (empty($_POST['type']) || empty($_POST['frequency']) || empty($_POST['title']) || empty($_POST['date']) || empty($_POST['description']) || empty($_POST['id_category']) || empty($_POST['amount']))) {      
+        echo json_encode(['message' => 'Missing data. Verify the fields', 'success' => false]);
         die();
     }
-    $stmt = $db->prepare(
-        'INSERT INTO transaction (type, frequency, title, date, description, id_category, id_user, amount)
-        VALUES (:type, :frequency, :title, :date, :description, :id_category, :id_user, :amount)');
-    $stmt->execute([
-        'type' => $_POST['type'],
-        'frequency' => $_POST['frequency'],
-        'title' => $_POST['title'],
-        'date' => $_POST['date'],
-        'description' => $_POST['description'],
-        'id_category' => $_POST['id_category'],
-        'id_user' => $decodedToken->id,
-        'amount' => $_POST['amount']
-    ]);
-    echo json_encode(['message' => 'Transaction added.', 'success' => true]);
+    try {
+        echo (gettype($_POST['type']));
+        $stmt = $db->prepare(
+            'INSERT INTO transaction (type, frequency, title, date, description, id_category, id_user, amount)
+            VALUES (:type, :frequency, :title, :date, :description, :id_category, :id_user, :amount)'
+        );
+        $stmt->execute([
+            'type' => $_POST['type'],
+            'frequency' => $_POST['frequency'],
+            'title' => $_POST['title'],
+            'date' => $_POST['date'],
+            'description' => $_POST['description'],
+            'id_category' => $_POST['id_category'],
+            'id_user' => $decodedToken->id,
+            'amount' => $_POST['amount']
+        ]);
+        echo json_encode(['message' => 'Transaction added.', 'success' => true]);
+    } catch (Exception $e) {
+        echo json_encode(['message' => 'Error while adding transaction, verify the fields.', 'success' => false]);
+    }
 }
 
 if (isset($_GET['del-transaction']) && isset($_GET['id'])) {
@@ -76,7 +130,8 @@ if (isset($_GET['modif-transaction']) && isset($_GET['id'])) {
     }
     $stmt = $db->prepare(
         'UPDATE transaction SET type = :type, frequency = :frequency, title = :title, date = :date, description = :description, id_category = :id_category, amount = :amount
-        WHERE id = :id AND id_user = :user_id');
+        WHERE id = :id AND id_user = :user_id'
+    );
     $stmt->execute([
         'type' => $_POST['type'],
         'frequency' => $_POST['frequency'],

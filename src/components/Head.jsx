@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import UserContext from '../contexts/user.context';
+import Nav from './Nav';
 
 export default function Head() {
 
@@ -25,13 +26,8 @@ export default function Head() {
 
     return (
         <header>
-            <h1>MoneyMinder</h1>
-            {user.isAuth && (
-                <>
-                    <p>Welcome {user.email}</p>
-                    <button onClick={handleLogout}>Logout</button>
-                </>
-            )}
-        </header>
+            <h1>BudgetBud</h1>
+            <Nav handleLogout={handleLogout} />
+        </header >
     )
 }
