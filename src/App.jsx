@@ -8,6 +8,7 @@ import { useContext, useEffect, useState } from 'react';
 import "./index.css";
 import Foot from "./components/Foot";
 import AddTransacForm from "./components/AddTransacForm";
+import History from "./components/History";
 
 function App() {
 
@@ -16,6 +17,7 @@ function App() {
   const [total, setTotal] = useState(0);
   const [showTransacForm, setShowTransacForm] = useState(false);
   const [transacType, setTransacType] = useState('');
+  const [sectionToShow, setSectionToShow] = useState('home');
 
   const updateChart = () => {
     console.log('updating chart');
@@ -49,15 +51,24 @@ function App() {
       {!user.isAuth && <Authenticate />}
       {showTransacForm && <AddTransacForm setShowTransacForm={setShowTransacForm} updateChart={updateChart} transacType={transacType} />}
       <Wrapper>
-        <Head />
+        <Head setSectionToShow={setSectionToShow} />
       </Wrapper>
       <section className="main-section">
-      <Wrapper>
-        <View update={update} setTotal={setTotal} total={total} />
-      </Wrapper>
-      <Wrapper>
-        <Foot setShowTransacForm={setShowTransacForm} setTransacType={setTransacType} />
-      </Wrapper>
+        {sectionToShow === 'home' && (
+          <>
+            <Wrapper>
+              <View update={update} setTotal={setTotal} total={total} />
+            </Wrapper>
+            <Wrapper>
+              <Foot setShowTransacForm={setShowTransacForm} setTransacType={setTransacType} />
+            </Wrapper>
+          </>
+        )}
+        {sectionToShow === 'history' && (
+          <Wrapper>
+            <History />
+          </Wrapper>
+        )}
       </section>
       {/* <BlobAnimation /> */}
     </div>

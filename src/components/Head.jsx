@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import UserContext from '../contexts/user.context';
 import Nav from './Nav';
 
-export default function Head() {
+export default function Head({ setSectionToShow }) {
 
     const { user, setUser } = useContext(UserContext);
 
@@ -27,7 +27,7 @@ export default function Head() {
     return (
         <header>
             <h1>BudgetBud</h1>
-            <Nav handleLogout={handleLogout} />
+            <Nav handleLogout={handleLogout} setSectionToShow={setSectionToShow} />
         </header >
     )
 }
