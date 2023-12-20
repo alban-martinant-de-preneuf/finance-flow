@@ -30,7 +30,7 @@ export default function Foot({ setShowTransacForm, setTransacType }) {
             );
             const data = await response.json();
             console.log(data);
-            if (data.success) {
+            if (data.remaining) {
                 setPrevBudget(data.remaining);
             }
         } catch (error) {

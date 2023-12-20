@@ -27,7 +27,6 @@ export default function History() {
         let total = 0;
         for (const day in dbMonthData) {
             for (const entry of dbMonthData[day]) {
-                // console.log(entry);
                 if (entry.type === 'expense') total -= entry.amount;
                 else if (entry.type === 'income') total += entry.amount;
             }
@@ -64,12 +63,34 @@ export default function History() {
             <div className="history-header">
                 <h2>{monthNames[currentMonth - 1]} {currentYear}</h2>
                 <p>Result: {monthResult} €</p>
+                <button className="btn btn-prev" onClick={() => {
+                    setCurrentMonth(prev => {
+                        if (prev === 1) {
+                            setCurrentYear(prev => prev - 1);
+                            return 12;
+                        }
+                        return prev - 1;
+                    });
+                }
+                }>&lt;</button>
+                <button className="btn btn-next" onClick={() => {
+                    setCurrentMonth(prev => {
+                        if (prev === 12) {
+                            setCurrentYear(prev => prev + 1);
+                            return 1;
+                        }
+                        return prev + 1;
+                    });
+                }
+                }>&gt;</button>
+                <hr className="history-header-separator" />
             </div>
             <div className="history-body">
                 <div className="history-body-content">
                     {Object.keys(dbMonthData).map((date, index) => (
                         <div className="history-day" key={index}>
-                            <h3>{date}</h3>
+                            {/* format December 20, 2023 */}
+                            <h4>{new Date(date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</h4>
                             {dbMonthData[date].map((entry, index) => (
                                 <div className="history-entry" key={index}>
                                     <p>{entry.title}</p>
@@ -81,6 +102,7 @@ export default function History() {
                                     }
                                 </div>
                             ))}
+                            <hr className="history-day-separator" />
                         </div>
                     ))}
                 </div>
