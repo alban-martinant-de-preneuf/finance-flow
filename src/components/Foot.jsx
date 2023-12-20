@@ -2,8 +2,10 @@ import TransactionBtn from './TransactionBtn';
 import { useEffect, useContext } from 'react';
 import BudgetContext from '../contexts/budget.context';
 
-export default function Foot({ setShowTransacForm, setTransacType }) {
+import PropTypes from 'prop-types';
 
+export default function Foot({ setShowTransacForm, setTransacType }) {
+    // component code here
     const handleTransac = (e) => {
         e.preventDefault();
         setTransacType(e.target.name.split('-')[0]);
@@ -59,3 +61,8 @@ export default function Foot({ setShowTransacForm, setTransacType }) {
         </footer>
     )
 }
+
+Foot.propTypes = {
+    setShowTransacForm: PropTypes.func.isRequired,
+    setTransacType: PropTypes.func.isRequired,
+};

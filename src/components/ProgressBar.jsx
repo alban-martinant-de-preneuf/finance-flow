@@ -1,12 +1,9 @@
-import { useEffect, useState, useContext, useRef } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { PieChart, Pie, Cell } from 'recharts';
 import UserContext from '../contexts/user.context';
 import BudgetContext from '../contexts/budget.context';
-
-const monthNames = [
-    'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September',
-    'October', 'November', 'December',
-];
+import { monthNames } from '../utils/constants';
+import PropTypes from 'prop-types';
 
 export default function ProgressBar({ update }) {
 
@@ -128,3 +125,7 @@ export default function ProgressBar({ update }) {
         </>
     );
 }
+
+ProgressBar.propTypes = {
+    update: PropTypes.number.isRequired,
+};
