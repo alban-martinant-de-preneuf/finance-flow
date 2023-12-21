@@ -50,11 +50,11 @@ export default function Foot({ setShowTransacForm, setTransacType }) {
             </div>
             <div className='infos'>
                 <div className='spends'>
-                    <p>${monthExpenses}</p>
+                    <p>- {monthExpenses} €</p>
                     <h4>Spends</h4>
                 </div>
                 <div className='budjet'>
-                    <p>${prevBudget + monthIncomes}</p>
+                    <p>{prevBudget + monthIncomes} €</p>
                     <h4>Budget</h4>
                 </div>
             </div>
