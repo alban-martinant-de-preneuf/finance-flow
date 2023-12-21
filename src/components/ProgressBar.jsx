@@ -43,9 +43,7 @@ export default function ProgressBar({ update }) {
     }
 
     useEffect(() => {
-        console.log('update');
         if (user.isAuth) {
-            console.log('fetching data');
             fetchData();
         } else {
             setDbData([]);
@@ -64,28 +62,42 @@ export default function ProgressBar({ update }) {
 
     useEffect(() => {
         const monthBudget = prevBudget + monthIncomes;
-        const expensesPercentage = monthExpenses / monthBudget * 100;
-        let remainingPercentage = 100 - expensesPercentage;
-        if (monthIncomes === 0 && monthExpenses === 0) {
-            setPieData([{ name: 'empty', value: 100, color: 'gray' }]);
-            setTotal(0);
-        } else {
-            if (expensesPercentage <= 100) {
-                setPieData([
-                    { value: remainingPercentage, color: 'green' },
-                    { value: expensesPercentage, color: 'red' },
-                ]);
-            } else {
-                const exededPercentage = expensesPercentage - 100;
-                remainingPercentage = 100 - exededPercentage;
-                setPieData([
-                    { value: remainingPercentage, color: 'red' },
-                    { value: exededPercentage, color: 'black' },
-                ]);
-            }
-            setTotal(monthBudget - monthExpenses);
+        // if (monthIncomes === 0 && monthExpenses === 0) {
+        //     setPieData([{ name: 'empty', value: 100, color: 'gray' }]);
+        //     setTotal(0);
+        // } else {
+        //     if (expensesPercentage <= 100) {
+        //         setPieData([
+        //             { value: remainingPercentage, color: 'green' },
+        //             { value: expensesPercentage, color: 'red' },
+        //         ]);
+        //     } else {
+        //         const exededPercentage = expensesPercentage - 100;
+        //         remainingPercentage = 100 - exededPercentage;
+        //         setPieData([
+        //             { value: remainingPercentage, color: 'red' },
+        //             { value: exededPercentage, color: 'black' },
+        //         ]);
+        //     }
+        //     setTotal(monthBudget - monthExpenses);
+        // }
+        setTotal(monthBudget - monthExpenses);
+        if (total > 0) {
+            const expensesPercentage = monthExpenses / monthBudget * 100;
+            const remainingPercentage = 100 - expensesPercentage;
+            setPieData([
+                { value: remainingPercentage, color: 'green' },
+                { value: expensesPercentage, color: 'red' },
+            ]);
+        } else if (total < 0) {
+            const exededPercentage = monthExpenses / monthBudget * 100 - 100;
+            const remainingPercentage = 100 - exededPercentage;
+            setPieData([
+                { value: remainingPercentage, color: 'red' },
+                { value: exededPercentage, color: 'black' },
+            ]);
         }
-    }, [monthIncomes, monthExpenses]);
+    }, [monthIncomes, monthExpenses, prevBudget, total]);
 
     useEffect(() => {
         if (monthIncomes === 0 && monthExpenses === 0) {
